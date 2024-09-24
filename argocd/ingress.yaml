@@ -13,3 +13,17 @@ spec:
           port: https
   tls:
     passthrough: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: prometheus-ingress
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`prometheus.va.local`) && PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: prometheus-server
+      port: 80

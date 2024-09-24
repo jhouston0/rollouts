@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argo-rollouts-config
+  namespace: argo-rollouts
+data:
+  plugins: |-
+    metrics:
+    - name: "prometheus" # name of the plugin uses the name to find this configuration, it must match the name required by the plugin
+      location: "https://github.com/argoproj-labs/sample-rollouts-metric-plugin/releases/down
