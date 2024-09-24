@@ -14,6 +14,7 @@ all-kind: kind-cluster install argocd traefik argo-pw
 
 pre: 
 	brew install argoproj/tap/kubectl-argo-rollouts
+	brew install --cask openlens
  
 install: 
 	kubectl apply -f metrics/metrics-server.yaml
