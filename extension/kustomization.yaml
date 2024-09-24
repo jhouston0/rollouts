@@ -1,0 +1,6 @@
+# kustomization.yaml
+resources:
+  - extension.yaml
+
+patchesStrategicMerge:
+  - patch.yaml
