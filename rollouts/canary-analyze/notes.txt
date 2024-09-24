@@ -1,5 +1,5 @@
 
-kubectl apply -f /Users/j/va-localdev/rollouts/canary-analyze
+kubectl apply -f rollouts/canary-analyze
 kubectl argo rollouts get rollout rollouts-demo --watch
 
 kubectl argo rollouts set image rollouts-demo rollouts-demo=argoproj/rollouts-demo:yellow

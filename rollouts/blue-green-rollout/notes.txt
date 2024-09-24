@@ -1,4 +1,4 @@
-kubectl apply -f /Users/j/va-localdev/rollouts/blue-green-rollout
+kubectl apply -f rollouts/blue-green-rollout
 kubectl argo rollouts get rollout rollout-bluegreen -watch
 
 #trigger green deployment
@@ -11,4 +11,4 @@ https://www.infracloud.io/blogs/progressive-delivery-argo-rollouts-blue-green-de
 
 
 #cleanup
-kubectl delete -f /Users/j/va-localdev/rollouts/blue-green-rollout
+kubectl delete -f rollouts/blue-green-rollout

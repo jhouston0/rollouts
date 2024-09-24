@@ -1,4 +1,4 @@
-kubectl apply -f /Users/j/va-localdev/rollouts/canary
+kubectl apply -f rollouts/canary
 
 kubectl argo rollouts get rollout rollouts-demo --watch
 kubectl argo rollouts set image rollouts-demo rollouts-demo=argoproj/rollouts-demo:yellow
@@ -7,7 +7,7 @@ promote:
 kubectl argo rollouts promote rollouts-demo
 
 cleanup:
-kubectl delete -f /Users/j/va-localdev/rollouts/canary
+kubectl delete -f rollouts/canary
 
 based off of:
 https://www.infracloud.io/blogs/progressive-delivery-argo-rollouts-canary-deployment/
