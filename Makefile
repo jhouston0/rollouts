@@ -36,6 +36,8 @@ argo-rollouts:
 	kubectl create namespace argo-rollouts || true
 	kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
 	kubectl apply -k https://github.com/argoproj/argo-rollouts/manifests/crds\?ref\=stable
+	sleep 15
+	cd rollouts/plugin && kubectl patch configmaps -n argo-rollouts argo-rollouts-config --patch "$(cat prometheus.yaml)"
 
 argo-pw:
 	@echo "username: admin"

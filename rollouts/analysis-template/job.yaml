@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate
 metadata:
-  name: range-query-example
+  name: example-job
 spec:
   args:
   - name: service-name
@@ -22,6 +22,6 @@ spec:
             spec:
               containers:
               - name: test
-                image: my-image:latest
+                image: ubuntu:latest
                 command: [my-test-script, my-service.default.svc.cluster.local]
               restartPolicy: Never
