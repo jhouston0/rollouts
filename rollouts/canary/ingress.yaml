@@ -1,0 +1,13 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: rollouts-ingress
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`canary.va.local`) && PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: rollouts-demo
+      port: 80

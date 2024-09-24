@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: blue-green-rollout
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/jhouston0/rollouts'
+    targetRevision: HEAD
+    path: blue-green-rollout
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: canary-analyze
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/jhouston0/rollouts'
+    targetRevision: HEAD
+    path: canary-analyze
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

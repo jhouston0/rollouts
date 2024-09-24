@@ -1,0 +1,9 @@
+https://argo-rollouts.readthedocs.io/en/stable/features/traffic-management/traefik/
+
+weighted round robin load balancing, traffic mirroring
+
+
+
+https://github.com/argoproj/rollouts-demo
+
+

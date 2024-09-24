@@ -1,0 +1,13 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: bluegreen-demo-preview
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`bg-preview.va.local`) && PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: http
+      port: 80

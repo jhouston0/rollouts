@@ -1,0 +1,14 @@
+kubectl apply -f /Users/j/va-localdev/rollouts/blue-green-rollout
+kubectl argo rollouts get rollout rollout-bluegreen -watch
+
+#trigger green deployment
+kubectl argo rollouts set image rollout-bluegreen rollouts-demo=argoproj/rollouts-demo:green
+
+#promote rollout 
+kubectl argo rollouts promote rollout-bluegreen
+based off of:
+https://www.infracloud.io/blogs/progressive-delivery-argo-rollouts-blue-green-deployment/
+
+
+#cleanup
+kubectl delete -f /Users/j/va-localdev/rollouts/blue-green-rollout

@@ -1,0 +1,9 @@
+
+kubectl apply -f /Users/j/va-localdev/rollouts/canary-analyze
+kubectl argo rollouts get rollout rollouts-demo --watch
+
+kubectl argo rollouts set image rollouts-demo rollouts-demo=argoproj/rollouts-demo:yellow
+
+kubectl get analysistemplates.argoproj.io canary-check -o yaml
+kubectl get AnalysisRun
+kubectl get job -o wide

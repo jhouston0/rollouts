@@ -30,26 +30,29 @@ argocd:
 	@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v$(ARGOCD_VERSION)/manifests/install.yaml
 	@sleep 10 # Give some time for resources to be created before querying for the secret
 	@kubectl get secrets -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode && echo
+
 argo-rollouts:
-	helm repo add argo https://argoproj.github.io/argo-helm || true
-	helm repo update || true
-	kubectl create ns argo-rollouts || true
-	helm install argo-rollouts argo/argo-rollouts --namespace argo-rollouts
+	kubectl create namespace argo-rollouts || true
+	kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+	kubectl apply -k https://github.com/argoproj/argo-rollouts/manifests/crds\?ref\=stable
 
 argo-pw:
 	@echo "username: admin"
 	@echo "password:"; kubectl get secrets -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode ; echo
 
 demo-apps:	
-	kubectl apply -f argocd/demo-apps.yaml
+	kubectl apply -f demo-apps.yaml
 
 delete:
 	kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v$(ARGOCD_VERSION)/manifests/install.yaml
 	helm delete -n traefik traefik
 	kubectl delete -f argocd/demo-apps.yaml
 
-identity-dashboard:
-    helm repo add bitnami https://charts.bitnami.com/bitnami || true
+prometheus:
+	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts || true
+	helm repo update
+	helm upgrade -i prometheus prometheus-community/prometheus
+	kubectl patch ds prometheus-prometheus-node-exporter  --type "json" -p '[{"op": "remove", "path" : "/spec/template/spec/containers/0/volumeMounts/2/mountPropagation"}]'
 
 
 ##### KIND CLUSTER CONFIGURATION ####

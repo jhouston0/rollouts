@@ -1,0 +1,13 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: TraefikService
+metadata:
+  name: traefik-service
+spec:
+  weighted:
+    services:
+      - name: stable-rollout # k8s service name that you need to create for stable application version
+        port: 80
+      - name: canary-rollout # k8s service name that you need to create for new application version
+        port: 80
+
+#Notice, we don't specify the weight field. It is necessary to be synced with ArgoCD. If we specify this field and Argo Rollouts controller changes it, then the ArgoCD controller will notice it and will show that this resource is out of sync (if you are using Argo CD to manage your Rollout).
