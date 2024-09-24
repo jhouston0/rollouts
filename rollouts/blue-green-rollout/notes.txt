@@ -1,5 +1,5 @@
 kubectl apply -f rollouts/blue-green-rollout
-kubectl argo rollouts get rollout rollout-bluegreen -watch
+kubectl argo rollouts get rollout rollout-bluegreen --watch
 
 #trigger green deployment
 kubectl argo rollouts set image rollout-bluegreen rollouts-demo=argoproj/rollouts-demo:green
