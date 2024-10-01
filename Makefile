@@ -29,7 +29,7 @@ traefik:
 argocd:
 	@kubectl get namespace argocd || kubectl create namespace argocd
 	#@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v$(ARGOCD_VERSION)/manifests/install.yaml
-	@kubectl apply -n argocd -f argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+	@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 	@sleep 10 # Give some time for resources to be created before querying for the secret
 	@kubectl get secrets -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode && echo
 
