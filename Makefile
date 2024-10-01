@@ -24,7 +24,7 @@ traefik:
 	helm repo add traefik https://traefik.github.io/charts ; helm repo update || true
 	kubectl create ns traefik || true
 	helm upgrade -i -n traefik traefik traefik/traefik --version $(TRAEFIK_CHART_VER)
-	kubectl apply -f ingress.yaml
+	#kubectl apply -f ingress.yaml
 
 argocd:
 	@kubectl get namespace argocd || kubectl create namespace argocd
