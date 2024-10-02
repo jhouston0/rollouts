@@ -47,7 +47,11 @@ argo-pw:
 demo-apps:	
 	kubectl apply -f demo-apps.yaml
 
-delete-apps:
+delete-demo-apps:
+	kubectl delete -f rollouts/blue-green-rollout || true
+	kubectl delete -f rollouts/canary || true
+	kubectl delete -f rollouts/canary-analyze || true
+delete-argo:
 	kubectl delete -f demo-apps.yaml || true
 	kubectl delete -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
 	kubectl delete -k https://github.com/argoproj/argo-rollouts/manifests/crds\?ref\=stable
