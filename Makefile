@@ -8,17 +8,17 @@ ARGOCD_VERSION := 2.12.3
 #traefik chart url https://github.com/traefik/traefik-helm-chart/
 TRAEFIK_CHART_VER := 23.2.0
 
-all: install argocd traefik argo-pw
+all: base argocd traefik argo-pw
 
 all-kind: kind-cluster install argocd traefik argo-pw
 
 pre: 
 	brew install argoproj/tap/kubectl-argo-rollouts
 	brew install --cask openlens
- 
-install: 
-	kubectl apply -f metrics/metrics-server.yaml
 	helm repo add traefik https://traefik.github.io/charts || true
+ 
+base: 
+	kubectl apply -f metrics/metrics-server.yaml
 
 traefik:
 	helm repo add traefik https://traefik.github.io/charts ; helm repo update || true
@@ -30,7 +30,7 @@ argocd:
 	@kubectl get namespace argocd || kubectl create namespace argocd
 	#@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v$(ARGOCD_VERSION)/manifests/install.yaml
 	@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-	@sleep 10 # Give some time for resources to be created before querying for the secret
+	@sleep 15 # Give some time for resources to be created before querying for the secret
 	@kubectl get secrets -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode && echo
 
 argo-rollouts:
@@ -47,10 +47,21 @@ argo-pw:
 demo-apps:	
 	kubectl apply -f demo-apps.yaml
 
-delete:
-	kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v$(ARGOCD_VERSION)/manifests/install.yaml
+delete-apps:
+	kubectl delete -f demo-apps.yaml || true
+	kubectl delete -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+	kubectl delete -k https://github.com/argoproj/argo-rollouts/manifests/crds\?ref\=stable
+	#kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v$(ARGOCD_VERSION)/manifests/install.yaml
+	@kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+delete-all:
+	#kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v$(ARGOCD_VERSION)/manifests/install.yaml
+	@kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 	helm delete -n traefik traefik
-	kubectl delete -f argocd/demo-apps.yaml
+	kubectl delete -f demo-apps.yaml
+	kubectl delete -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+	kubectl delete -k https://github.com/argoproj/argo-rollouts/manifests/crds\?ref\=stable
+	helm delete -i prometheus prometheus-community/prometheus
 
 prometheus:
 	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts || true
