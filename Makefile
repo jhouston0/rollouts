@@ -44,25 +44,25 @@ argo-pw:
 	@echo "username: admin"
 	@echo "password:"; kubectl get secrets -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode ; echo
 
-demo-apps:	
-	kubectl apply -f demo-apps.yaml
+argocd-demo-apps:	
+	kubectl apply -f argocd-demo-apps.yaml
 
 delete-demo-apps:
 	kubectl delete -f rollouts/blue-green-rollout || true
 	kubectl delete -f rollouts/canary || true
 	kubectl delete -f rollouts/canary-analyze || true
 delete-argo:
-	kubectl delete -f demo-apps.yaml || true
+	kubectl delete -f argocd-demo-apps.yaml || true
 	kubectl delete -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
 	kubectl delete -k https://github.com/argoproj/argo-rollouts/manifests/crds\?ref\=stable
 	#kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v$(ARGOCD_VERSION)/manifests/install.yaml
 	@kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 delete-all:
+	kubectl delete -f argocd-demo-apps.yaml || true
 	#kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v$(ARGOCD_VERSION)/manifests/install.yaml
 	@kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 	helm delete -n traefik traefik
-	kubectl delete -f demo-apps.yaml
 	kubectl delete -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
 	kubectl delete -k https://github.com/argoproj/argo-rollouts/manifests/crds\?ref\=stable
 	helm delete -i prometheus prometheus-community/prometheus
