@@ -32,6 +32,7 @@ argocd:
 	@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 	@sleep 15 # Give some time for resources to be created before querying for the secret
 	@kubectl get secrets -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode && echo
+	@kubectl patch deployment argocd-server -n argocd --patch "$(cat argocd/patch.yaml)"
 
 argo-rollouts:
 	kubectl create namespace argo-rollouts || true
