@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: 'https://github.com/jhouston0/rollouts'
     targetRevision: HEAD
-    path: argocd/apps/rollouts.yaml
+    path: rollouts-platform
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: default
