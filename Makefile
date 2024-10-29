@@ -25,14 +25,19 @@ traefik:
 	helm repo add traefik https://traefik.github.io/charts ; helm repo update || true
 	kubectl create ns traefik || true
 	helm upgrade -i -n traefik traefik traefik/traefik --version $(TRAEFIK_CHART_VER)
-	#kubectl apply -f ingress.yaml
 
-argocd-platform:
+#platform specific versioning.
+argo-platform:
 	@kubectl create namespace argocd || true
+	@kubectl create namespace argo-rollouts || true
 	@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v$(ARGOCD_VERSION)/manifests/install.yaml
 	@sleep 15 # Give some time for resources to be created before querying for the secret
 	@kubectl get secrets -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode && echo
 	@cd argocd ; kubectl patch deployment argocd-server -n argocd --patch-file=patch.yaml
+	@kubectl apply -f argocd/ingress.yaml
+	@kubectl apply -f argocd/apps/rollouts.yaml
+
+#latest and greatest versions. do not assume this works in dev/stg
 argocd-devops:
 	@kubectl create namespace argocd || true
 	@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
