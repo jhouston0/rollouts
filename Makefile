@@ -27,14 +27,18 @@ traefik:
 	helm upgrade -i -n traefik traefik traefik/traefik --version $(TRAEFIK_CHART_VER)
 	#kubectl apply -f ingress.yaml
 
-argocd:
-	@kubectl get namespace argocd || kubectl create namespace argocd
+argocd-platform:
+	@kubectl create namespace argocd || true
 	@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v$(ARGOCD_VERSION)/manifests/install.yaml
-	#@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 	@sleep 15 # Give some time for resources to be created before querying for the secret
 	@kubectl get secrets -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode && echo
 	@cd argocd ; kubectl patch deployment argocd-server -n argocd --patch-file=patch.yaml
-
+argocd-devops:
+	@kubectl create namespace argocd || true
+	@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+	@sleep 15 # Give some time for resources to be created before querying for the secret
+	@kubectl get secrets -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode && echo
+	@cd argocd ; kubectl patch deployment argocd-server -n argocd --patch-file=patch.yaml
 ##use this step when your not trying to mimic dev/stg etc
 argo-rollouts:
 	kubectl create namespace argo-rollouts || true
@@ -70,6 +74,7 @@ delete-all:
 	kubectl delete -k https://github.com/argoproj/argo-rollouts/manifests/crds\?ref\=stable
 	helm delete -i prometheus prometheus-community/prometheus
 
+#prometheus patch command is for macOS node exporter metrics
 prometheus:
 	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts || true
 	helm repo update
@@ -83,7 +88,3 @@ kind-cluster:
 	kubectl config use-context kind-kind
 kind-delete:
 	kind delete cluster -n kind
-
-
-#promehteus patch
-# kubectl patch ds prometheus-prometheus-node-exporter  --type "json" -p '[{"op": "remove", "path" : "/spec/template/spec/containers/0/volumeMounts/2/mountPropagation"}]'
