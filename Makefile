@@ -3,8 +3,9 @@
 #NOTE the K8_VERSION is only for kind clusters. Docker Desktop you have to take what it gets you.
 K8_VERSION = 1.29
 #argocd versions https://github.com/argoproj/argo-cd/releases
-#ARGOCD_VERSION := 2.4.6
-ARGOCD_VERSION := 2.12.3
+# 2.4.6 has an issue with argo rollout extensions (so old)
+ARGOCD_VERSION := 2.4.6
+#ARGOCD_VERSION := 2.12.3
 #traefik chart url https://github.com/traefik/traefik-helm-chart/
 TRAEFIK_CHART_VER := 23.2.0
 
@@ -28,12 +29,13 @@ traefik:
 
 argocd:
 	@kubectl get namespace argocd || kubectl create namespace argocd
-	#@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v$(ARGOCD_VERSION)/manifests/install.yaml
-	@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+	@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v$(ARGOCD_VERSION)/manifests/install.yaml
+	#@kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 	@sleep 15 # Give some time for resources to be created before querying for the secret
 	@kubectl get secrets -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode && echo
-	@kubectl patch deployment argocd-server -n argocd --patch "$(cat argocd/patch.yaml)"
+	@cd argocd ; kubectl patch deployment argocd-server -n argocd --patch-file=patch.yaml
 
+##use this step when your not trying to mimic dev/stg etc
 argo-rollouts:
 	kubectl create namespace argo-rollouts || true
 	kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
