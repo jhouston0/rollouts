@@ -8,8 +8,8 @@ spec:
   source:
     repoURL: 'https://github.com/jhouston0/rollouts'
     targetRevision: HEAD
-    path: rollouts-platform-upgrade/manifests
-    #path: rollouts-platform
+    #path: rollouts-platform-upgrade/manifests
+    path: rollouts-platform
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argo-rollouts

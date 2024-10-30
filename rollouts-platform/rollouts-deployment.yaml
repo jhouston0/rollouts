@@ -20,7 +20,7 @@ spec:
         app.kubernetes.io/name: argo-rollouts
     spec:
       containers:
-        - image: hubimage/argoproj-kubectl-argo-rollouts:release-1.6
+        - image: hubimage/argoproj-kubectl-argo-rollouts:release-1.0.6
           imagePullPolicy: IfNotPresent
           name: argo-rollouts
           ports:
