@@ -1,6 +1,6 @@
-# to bring up services type docker-compose up -d. This will bring up the services available to test
-# to stop the containers you can run "docker-compose stop"
-# to remove the containers you can type "docker-compose rm"
+# to bring up services type docker compose up -d. This will bring up the services available to test
+# to stop the containers you can run "docker compose stop"
+# to remove the containers you can type "docker compose rm"
 # to view postgres logs you can type "docker logs postgres-audit-db"
 # to view mongodb logs you can type "docker logs mongodb-audit-db"
 
