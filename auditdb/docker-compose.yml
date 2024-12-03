@@ -1,0 +1,34 @@
+# to bring up services type docker-compose up -d. This will bring up the services available to test
+# to stop the containers you can run "docker-compose stop"
+# to remove the containers you can type "docker-compose rm"
+# to view postgres logs you can type "docker logs postgres-audit-db"
+# to view mongodb logs you can type "docker logs mongodb-audit-db"
+
+services:
+  postgres:
+    image: postgres:14.4 #this version should align with the vets-api database version
+    container_name: postgres-audit-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: changemebro
+      POSTGRES_DB: auditdb
+    ports:
+      - "5433:5433" #default port. set to non standard 5433 to avoid conflict with other local postgres instances running
+    volumes:
+      - postgres_audit_data:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:5.0 #this version should align with available aws document-db versions
+    container_name: mongodb-audit-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: changemebro
+    ports:
+      - "27017:27017" #default port
+    volumes:
+      - mongo_auditdb_data:/data/db
+
+#named volumes that persist data
+volumes:
+  postgres_audit_data:
+  mongo_auditdb_data:
