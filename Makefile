@@ -24,7 +24,7 @@ base:
 traefik:
 	helm repo add traefik https://traefik.github.io/charts ; helm repo update || true
 	kubectl create ns traefik || true
-	helm upgrade -i -n traefik traefik traefik/traefik --version $(TRAEFIK_CHART_VER)
+	helm upgrade -i -n traefik traefik traefik/traefik --version $(TRAEFIK_CHART_VER) -f values.yaml
 
 #platform specific versioning.
 argo-platform:

@@ -1,0 +1,27 @@
+additionalArguments:
+  - "--serversTransport.insecureSkipVerify=true"
+#  - "--providers.kubernetesingress.ingressclass=traefik-internal"
+  - "--log.level=DEBUG"
+  - "--accesslog=true"
+  - "--accesslog.format=json"
+  - "--experimental.plugins=true"
+  - "--experimental.plugins.traefik-real-ip.moduleName=github.com/soulbalz/traefik-real-ip"
+  - "--experimental.plugins.traefik-real-ip.version=v1.0.3"
+
+deployment:
+  additionalVolumes:
+    - name: plugins-storage
+      emptyDir: {}
+  podSecurityContext:
+    fsGroup: 65532
+  securityContext:
+    capabilities:
+      drop: [ALL]
+    readOnlyRootFilesystem: false
+    runAsNonRoot: true
+    runAsUser: 65532
+    allowPrivilegeEscalation: false
+
+additionalVolumeMounts:
+  - name: plugins-storage
+    mountPath: /plugins-storage
