@@ -1,8 +1,11 @@
 additionalArguments:
   - "--serversTransport.insecureSkipVerify=true"
 #  - "--providers.kubernetesingress.ingressclass=traefik-internal"
-  - "--log.level=DEBUG"
+#  - "--log.level=DEBUG"
   - "--accesslog=true"
+  - '--accesslog=true'
+  - '--accesslog.fields.defaultmode=keep'
+  - '--accesslog.fields.headers.defaultmode=drop'
   - "--accesslog.format=json"
   - "--experimental.plugins=true"
   - "--experimental.plugins.traefik-real-ip.moduleName=github.com/soulbalz/traefik-real-ip"
@@ -25,3 +28,13 @@ deployment:
 additionalVolumeMounts:
   - name: plugins-storage
     mountPath: /plugins-storage
+
+access:
+  enabled: true
+  fields:
+    general:
+      defaultmode: keep
+      names:
+        ClientPort: keep
+        ClientHost: keep
+        ClientUsername: keep

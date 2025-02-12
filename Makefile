@@ -7,7 +7,8 @@ K8_VERSION = 1.29
 ARGOCD_VERSION := 2.4.6
 #ARGOCD_VERSION := 2.12.3
 #traefik chart url https://github.com/traefik/traefik-helm-chart/
-TRAEFIK_CHART_VER := 23.2.0
+#TRAEFIK_CHART_VER := 23.2.0
+TRAEFIK_CHART_VER := 10.15.0
 
 all: base argocd traefik argo-pw
 
